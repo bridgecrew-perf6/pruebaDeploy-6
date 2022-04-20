@@ -14,9 +14,9 @@ const Main = () => {
     const navigate = useNavigate()
 
     const getPets = async() => {
-        const response = await petApi("http://localhost:8000/api/pets");
+        const response = await axios.get("/api/pets");
         console.log(response);
-        setPets(response.pets);
+        setPets(response.data.pets);
     }
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const Main = () => {
     }, []);
 
     const crearPet = (pet) => {
-        axios.post("http://localhost:8000/api/pets/new", pet)
+        axios.post("/api/pets/new", pet)
             .then(res => {
                 console.log("pet creada");
                 setPets([...pets,res.data.pet])

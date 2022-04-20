@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React,{useState,useEffect} from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { petApi } from "../actions/petApi";
@@ -11,9 +12,9 @@ const Update = () => {
     const [count, setCount] = useState(0)
 
     const getPet = async() => {
-        const response = await petApi("http://localhost:8000/api/pets/" + id);
+        const response = await axios.get("/api/pets/" + id);
         console.log(response.pet);
-        setPet(response.pet);
+        setPet(response.data.pet);
     }
 
     useEffect(() => {
@@ -21,17 +22,9 @@ const Update = () => {
     }, []);
 
     const editarPet = (pet) => {
-        fetch("http://localhost:8000/api/pets/update/"+id, {
-        method: "PUT",
-        body: JSON.stringify(pet),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      })
+        axios.put("/api/pets/update/"+id, pet)
         .then((res) => res.json())
         .then((res) => {
-          console.log("pelicula editada");
           console.log(res);
           navigate("/")
         });
@@ -42,10 +35,7 @@ const Update = () => {
     }
 
     const eliminarPet = (idPet) => {
-        fetch('http://localhost:8000/api/pets/delete/'+idPet ,{
-            method:"DELETE",
-        })
-        .then(res => res.text())
+        axios.delete('/api/pets/delete/'+idPet )
         .then((res) => {
             getPet();
             navigate("/")
